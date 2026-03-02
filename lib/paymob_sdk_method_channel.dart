@@ -9,7 +9,7 @@ import 'paymob_sdk_platform_interface.dart';
 class MethodChannelPaymobSdk extends PaymobSdkPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('paymob_sdk_flutter');
+  final methodChannel = const MethodChannel('paymob/payment_channel');
 
   @override
   Future<PaymobTransactionStatus?> startPayment(PaymobParams params) async {

@@ -22,7 +22,7 @@ class PaymobSdkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PaymobS
     private var SDKResult: Result? = null
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "paymob_sdk_flutter")
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "paymob/payment_channel")
         channel.setMethodCallHandler(this)
     }
 

@@ -6,7 +6,7 @@ public class PaymobSdkPlugin: NSObject, FlutterPlugin {
   var SDKResult: FlutterResult?
 
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "paymob_sdk_flutter", binaryMessenger: registrar.messenger())
+    let channel = FlutterMethodChannel(name: "paymob/payment_channel", binaryMessenger: registrar.messenger())
     let instance = PaymobSdkPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
