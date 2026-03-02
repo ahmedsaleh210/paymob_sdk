@@ -31,7 +31,6 @@ class _MyAppState extends State<MyApp> {
       BaseOptions(
         baseUrl: 'https://accept.paymob.com/v1/',
         headers: {
-          // لاحظ الطريقة الجديدة لتمرير المفتاح في الـ Headers
           'Authorization': 'Token $_secretKey',
           'Content-Type': 'application/json',
         },
