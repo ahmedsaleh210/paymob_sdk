@@ -82,17 +82,17 @@ class _MyAppState extends State<MyApp> {
     );
     if (!context.mounted) return;
     switch (result) {
-      case PaymobTransactionStatus.successful:
+      case PaymobCheckoutStatus.successful:
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(const SnackBar(content: Text('Payment successful!')));
         break;
-      case PaymobTransactionStatus.rejected:
+      case PaymobCheckoutStatus.rejected:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Payment rejected. Please try again.')),
         );
         break;
-      case PaymobTransactionStatus.pending:
+      case PaymobCheckoutStatus.pending:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Payment pending. You will be notified.'),
@@ -121,7 +121,7 @@ class _MyAppState extends State<MyApp> {
                 child: const Text('Start Payment'),
               ),
             );
-          }
+          },
         ),
       ),
     );

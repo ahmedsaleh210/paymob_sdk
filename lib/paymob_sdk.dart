@@ -4,13 +4,13 @@ import 'package:flutter/services.dart';
 
 import 'paymob_sdk_platform_interface.dart';
 import 'utils/paymob_params.dart';
-import 'utils/paymob_transaction_status.dart';
+import 'utils/paymob_checkout_status.dart';
 
 export 'utils/paymob_params.dart';
-export 'utils/paymob_transaction_status.dart';
+export 'utils/paymob_checkout_status.dart';
 
 class PaymobSdk {
-  Future<PaymobTransactionStatus?> startPayment(PaymobParams params) async {
+  Future<PaymobCheckoutStatus?> startPayment(PaymobParams params) async {
     try {
       final result = await PaymobSdkPlatform.instance.startPayment(params);
       return result;
