@@ -53,6 +53,21 @@ flutter pub get
 
 ## Android Setup
 
+### 1. Add JitPack Repository
+
+In your `android/settings.gradle.kts`, add JitPack inside the `pluginManagement` repositories block:
+
+```kotlin
+pluginManagement {
+    repositories {
+        // ... your existing repositories
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+```
+
+### 2. Enable Data Binding
+
 In your app's `android/app/build.gradle.kts`, enable **Data Binding** inside the `android` block:
 
 ```kotlin
