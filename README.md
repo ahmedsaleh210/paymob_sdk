@@ -17,7 +17,7 @@ A Flutter plugin that integrates the **Paymob** payment gateway into your Androi
 - [API Reference](#api-reference)
   - [PaymobSdk](#paymodsdk)
   - [PaymobParams](#payмobparams)
-  - [PaymobTransactionStatus](#paymobtransactionstatus)
+  - [PaymobCheckoutStatus](#paymobcheckoutstatus)
 - [Complete Example](#complete-example)
 - [Security Notes](#security-notes)
 - [Troubleshooting](#troubleshooting)
@@ -139,20 +139,20 @@ Future<void> pay() async {
 
 ### 3. Handle the Result
 
-`startPayment` returns a `PaymobTransactionStatus?`. Check the value to determine what happened:
+`startPayment` returns a `PaymobCheckoutStatus?`. Check the value to determine what happened:
 
 ```dart
 switch (result) {
-  case PaymobTransactionStatus.successful:
+  case PaymobCheckoutStatus.successful:
     // Payment was completed successfully
     break;
-  case PaymobTransactionStatus.rejected:
+  case PaymobCheckoutStatus.rejected:
     // Payment was declined / rejected
     break;
-  case PaymobTransactionStatus.pending:
+  case PaymobCheckoutStatus.pending:
     // Payment is pending (e.g. cash payment awaiting confirmation)
     break;
-  case PaymobTransactionStatus.unknown:
+  case PaymobCheckoutStatus.unknown:
   case null:
     // Unexpected state or the payment sheet was dismissed
     break;
@@ -169,7 +169,7 @@ The main entry point of the plugin.
 
 ```dart
 class PaymobSdk {
-  Future<PaymobTransactionStatus?> startPayment(PaymobParams params);
+  Future<PaymobCheckoutStatus?> startPayment(PaymobParams params);
 }
 ```
 
@@ -207,12 +207,12 @@ const PaymobParams({
 
 ---
 
-### `PaymobTransactionStatus`
+### `PaymobCheckoutStatus`
 
 An enum representing the final state of a payment attempt.
 
 ```dart
-enum PaymobTransactionStatus {
+enum PaymobCheckoutStatus {
   successful,  // Transaction completed and approved
   rejected,    // Transaction was declined
   pending,     // Transaction is awaiting offline confirmation
@@ -261,17 +261,17 @@ class CheckoutPage extends StatelessWidget {
     // Step 3: React to the result
     if (!context.mounted) return;
     switch (status) {
-      case PaymobTransactionStatus.successful:
+      case PaymobCheckoutStatus.successful:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Payment successful!')),
         );
         break;
-      case PaymobTransactionStatus.rejected:
+      case PaymobCheckoutStatus.rejected:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Payment rejected. Please try again.')),
         );
         break;
-      case PaymobTransactionStatus.pending:
+      case PaymobCheckoutStatus.pending:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Payment pending. You will be notified.')),
         );
