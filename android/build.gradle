@@ -14,19 +14,20 @@ buildscript {
     }
 }
 
-allprojects {
+def pluginDir = project.projectDir
+
+rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
         maven {
-            url "${project.projectDir}/libs"
+            url uri("${pluginDir}/libs")
         }
         maven {
             url "https://jitpack.io"
         }
     }
 }
-
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
@@ -38,10 +39,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    buildFeatures {
-        dataBinding true
     }
 
     kotlinOptions {
@@ -76,5 +73,5 @@ android {
 }
 
 dependencies {
-    implementation("com.paymob.sdk:Paymob-SDK:1.7.3")
+    api("com.paymob.sdk:Paymob-SDK:1.7.3")
 }

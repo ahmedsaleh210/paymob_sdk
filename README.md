@@ -9,6 +9,7 @@ A Flutter plugin that integrates the **Paymob** payment gateway into your Androi
 - [Features](#features)
 - [Installation](#installation)
 - [Prerequisites](#prerequisites)
+- [Android Setup](#android-setup)
 - [Usage](#usage)
   - [1. Create a Payment Intention (Backend)](#1-create-a-payment-intention-backend)
   - [2. Start Payment (Flutter)](#2-start-payment-flutter)
@@ -39,7 +40,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  paymob_sdk: ^0.0.1
+  paymob_sdk: <lastest>
 ```
 
 Then run:
@@ -47,6 +48,24 @@ Then run:
 ```bash
 flutter pub get
 ```
+
+---
+
+## Android Setup
+
+In your app's `android/app/build.gradle.kts`, enable **Data Binding** inside the `android` block:
+
+```kotlin
+android {
+    // ... your existing config
+
+    buildFeatures {
+        dataBinding = true
+    }
+}
+```
+
+> ⚠️ Without this, the app will crash on Android.
 
 ---
 
@@ -277,6 +296,17 @@ class CheckoutPage extends StatelessWidget {
 ---
 
 ## Troubleshooting
+
+**App crashes immediately when calling `startPayment` on Android**
+- This is most likely caused by missing Data Binding configuration. Make sure you have added the following to your `android/app/build.gradle.kts`:
+  ```kotlin
+  android {
+      buildFeatures {
+          dataBinding = true
+      }
+  }
+  ```
+  Then run `flutter clean && flutter pub get` and rebuild the app.
 
 **`PlatformException` is thrown when calling `startPayment`**
 - Make sure the `publicKey` and `clientSecret` are correct and not expired.

@@ -84,11 +84,11 @@ class PaymobSdkPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, PaymobS
     }
 
     // PaymobSDK Return Values
-    override fun onSuccess() {
+    override fun onSuccess(payResponse: HashMap<String, String?>) {
         SDKResult?.success("Successfull")
     }
 
-    override fun onFailure() {
+    override fun onFailure(msg: String?) {
         SDKResult?.success("Rejected")
     }
 

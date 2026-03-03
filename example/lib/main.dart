@@ -111,13 +111,17 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: const Text('Plugin example app')),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () async {
-              _pay(context);
-            },
-            child: const Text('Start Payment'),
-          ),
+        body: Builder(
+          builder: (context) {
+            return Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  _pay(context);
+                },
+                child: const Text('Start Payment'),
+              ),
+            );
+          }
         ),
       ),
     );
