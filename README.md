@@ -121,7 +121,7 @@ Future<void> pay() async {
   // Obtain client_secret from YOUR backend
   final clientSecret = await yourBackend.createPaymentIntention(amount: 100);
 
-  final result = await _paymobSdk.startPayment(
+  await _paymobSdk.startPayment(
     PaymobParams(
       publicKey: 'YOUR_PUBLIC_KEY',
       clientSecret: clientSecret,
@@ -131,6 +131,9 @@ Future<void> pay() async {
       saveCardDefault: false,                     // optional
       showSaveCard: true,                         // optional
     ),
+    onCheckoutStatus: (status) {
+      // handle status
+    },
   );
 }
 ```
@@ -139,24 +142,28 @@ Future<void> pay() async {
 
 ### 3. Handle the Result
 
-`startPayment` returns a `PaymobCheckoutStatus?`. Check the value to determine what happened:
+`startPayment` accepts an optional `onCheckoutStatus` callback that is invoked with the final `PaymobCheckoutStatus` when the flow completes:
 
 ```dart
-switch (result) {
-  case PaymobCheckoutStatus.successful:
-    // Payment was completed successfully
-    break;
-  case PaymobCheckoutStatus.rejected:
-    // Payment was declined / rejected
-    break;
-  case PaymobCheckoutStatus.pending:
-    // Payment is pending (e.g. cash payment awaiting confirmation)
-    break;
-  case PaymobCheckoutStatus.unknown:
-  case null:
-    // Unexpected state or the payment sheet was dismissed
-    break;
-}
+await _paymobSdk.startPayment(
+  params,
+  onCheckoutStatus: (status) {
+    switch (status) {
+      case PaymobCheckoutStatus.successful:
+        // Payment was completed successfully
+        break;
+      case PaymobCheckoutStatus.rejected:
+        // Payment was declined / rejected
+        break;
+      case PaymobCheckoutStatus.pending:
+        // Payment is pending (e.g. cash payment awaiting confirmation)
+        break;
+      case PaymobCheckoutStatus.unknown:
+        // Unexpected state
+        break;
+    }
+  },
+);
 ```
 
 ---
@@ -169,13 +176,16 @@ The main entry point of the plugin.
 
 ```dart
 class PaymobSdk {
-  Future<PaymobCheckoutStatus?> startPayment(PaymobParams params);
+  Future<PaymobCheckoutStatus?> startPayment(
+    PaymobParams params, {
+    void Function(PaymobCheckoutStatus status)? onCheckoutStatus,
+  });
 }
 ```
 
 | Method | Description |
 |--------|-------------|
-| `startPayment(PaymobParams params)` | Launches the Paymob payment UI and returns the transaction result when the flow completes. Throws a `PlatformException` if the native SDK encounters an unrecoverable error. |
+| `startPayment(PaymobParams params, {onCheckoutStatus})` | Launches the Paymob payment UI. Invokes the optional `onCheckoutStatus` callback and returns the status when the flow completes. Throws a `PlatformException` if the native SDK encounters an unrecoverable error. |
 
 ---
 
@@ -246,7 +256,7 @@ class CheckoutPage extends StatelessWidget {
     final clientSecret = await yourBackendService.createIntention(amount: 100);
 
     // Step 2: Launch the payment UI
-    final status = await _paymobSdk.startPayment(
+    await _paymobSdk.startPayment(
       PaymobParams(
         publicKey: _publicKey,
         clientSecret: clientSecret,
@@ -256,31 +266,32 @@ class CheckoutPage extends StatelessWidget {
         showSaveCard: true,
         saveCardDefault: false,
       ),
+      // Step 3: React to the result
+      onCheckoutStatus: (status) {
+        if (!context.mounted) return;
+        switch (status) {
+          case PaymobCheckoutStatus.successful:
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Payment successful!')),
+            );
+            break;
+          case PaymobCheckoutStatus.rejected:
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Payment rejected. Please try again.')),
+            );
+            break;
+          case PaymobCheckoutStatus.pending:
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Payment pending. You will be notified.')),
+            );
+            break;
+          default:
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Payment status unknown.')),
+            );
+        }
+      },
     );
-
-    // Step 3: React to the result
-    if (!context.mounted) return;
-    switch (status) {
-      case PaymobCheckoutStatus.successful:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Payment successful!')),
-        );
-        break;
-      case PaymobCheckoutStatus.rejected:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Payment rejected. Please try again.')),
-        );
-        break;
-      case PaymobCheckoutStatus.pending:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Payment pending. You will be notified.')),
-        );
-        break;
-      default:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Payment status unknown.')),
-        );
-    }
   }
 
   @override

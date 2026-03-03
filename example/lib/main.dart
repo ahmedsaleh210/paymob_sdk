@@ -69,7 +69,7 @@ class _MyAppState extends State<MyApp> {
 
   void _pay(BuildContext context) async {
     final clientSecret = await _createPaymentIntention(100);
-    final result = await _paymobSdk.startPayment(
+    await _paymobSdk.startPayment(
       PaymobParams(
         publicKey: _publicKey,
         clientSecret: clientSecret,
@@ -79,31 +79,35 @@ class _MyAppState extends State<MyApp> {
         saveCardDefault: false,
         showSaveCard: false,
       ),
+      onCheckoutStatus: (status) {
+        if (!context.mounted) return;
+        switch (status) {
+          case PaymobCheckoutStatus.successful:
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Payment successful!')),
+            );
+            break;
+          case PaymobCheckoutStatus.rejected:
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Payment rejected. Please try again.'),
+              ),
+            );
+            break;
+          case PaymobCheckoutStatus.pending:
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Payment pending. You will be notified.'),
+              ),
+            );
+            break;
+          default:
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Payment status unknown.')),
+            );
+        }
+      },
     );
-    if (!context.mounted) return;
-    switch (result) {
-      case PaymobCheckoutStatus.successful:
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Payment successful!')));
-        break;
-      case PaymobCheckoutStatus.rejected:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Payment rejected. Please try again.')),
-        );
-        break;
-      case PaymobCheckoutStatus.pending:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Payment pending. You will be notified.'),
-          ),
-        );
-        break;
-      default:
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Payment status unknown.')),
-        );
-    }
   }
 
   @override
