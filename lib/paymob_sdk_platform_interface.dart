@@ -1,8 +1,8 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'paymob_sdk_method_channel.dart';
-import 'utils/paymob_params.dart';
 import 'utils/paymob_checkout_status.dart';
+import 'utils/paymob_params.dart';
 
 abstract class PaymobSdkPlatform extends PlatformInterface {
   /// Constructs a PaymobSdkPlatform.
@@ -25,5 +25,7 @@ abstract class PaymobSdkPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<PaymobCheckoutStatus?> startPayment(PaymobParams params);
+  Future<PaymobCheckoutStatus?> startPayment(PaymobParams params) {
+    throw UnimplementedError('startPayment() has not been implemented.');
+  }
 }

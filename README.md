@@ -40,7 +40,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  paymob_sdk: <lastest>
+  paymob_sdk: <latest>
 ```
 
 Then run:

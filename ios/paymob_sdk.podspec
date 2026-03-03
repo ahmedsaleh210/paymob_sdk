@@ -5,11 +5,12 @@
 Pod::Spec.new do |s|
   s.name             = 'paymob_sdk'
   s.version          = '0.0.1'
-  s.summary          = 'A new Flutter plugin project.'
+  s.summary          = 'A Flutter plugin for integrating Paymob payment gateway.'
   s.description      = <<-DESC
-A new Flutter plugin project.
+A Flutter plugin that provides seamless integration with the Paymob payment gateway,
+enabling secure and easy payment processing for iOS and Android applications.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/ahmedsaleh210/paymob_sdk'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Ahmed Saleh' => 'ahmedsaleh212020@gmail.com' }
   s.source           = { :path => '.' }
