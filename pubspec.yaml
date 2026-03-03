@@ -1,7 +1,7 @@
 name: paymob_sdk
 description: "A Flutter plugin for integrating Paymob payment sdk, enabling seamless payment processing on Android and iOS."
 version: 0.0.1
-homepage: null
+homepage: https://github.com/ahmedsaleh210/paymob_sdk
 
 environment:
   sdk: ^3.10.0
